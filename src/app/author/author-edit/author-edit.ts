@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AuthorService } from '../author';
+import { AuthorService } from '../author.service';
 import { Author } from '../model/Author';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,9 +25,9 @@ export class AuthorEdit implements OnInit {
     protected readonly nationality = signal<string | null>(null);
 
     loadFormData(initialData: Author | null) {
-        this.id.set(initialData.id ?? null);
-        this.name.set(initialData.name ?? null);
-        this.nationality.set(initialData.nationality ?? null);
+        this.id.set(initialData?.id ?? null);
+        this.name.set(initialData?.name ?? null);
+        this.nationality.set(initialData?.nationality ?? null);
     }
 
     ngOnInit(): void {

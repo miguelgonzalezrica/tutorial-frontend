@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { AuthorEdit } from '../author-edit/author-edit';
-import { AuthorService } from '../author.service';
-import { Author } from '../model/Author';
+import { LoanEdit } from '../loan-edit/loan-edit';
+import { LoanService } from '../loan.service';
+import { Loan } from '../model/Loan';
 import { Pageable } from '../../core/model/page/Pageable';
 import { DialogConfirmation } from '../../core/dialog-confirmation/dialog-confirmation';
 import { CommonModule } from '@angular/common';
@@ -13,21 +13,21 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
-    selector: 'app-author-list',
+    selector: 'app-loan-list',
     standalone: true,
     imports: [MatButtonModule, MatIconModule, MatTableModule, CommonModule, MatPaginator],
-    templateUrl: './author-list.html',
-    styleUrl: './author-list.scss',
+    templateUrl: './loan-list.html',
+    styleUrl: './loan-list.scss',
 })
-export class AuthorList implements OnInit {
+export class LoanList implements OnInit {
     pageNumber: number = 0;
     pageSize: number = 5;
     totalElements: number = 0;
 
-    dataSource = new MatTableDataSource<Author>();
-    displayedColumns: string[] = ['id', 'name', 'nationality', 'action'];
+    dataSource = new MatTableDataSource<Loan>();
+    displayedColumns: string[] = ['id', 'gameName', 'clientName', 'loanDate', 'returnDate', 'action'];
 
-    constructor(private authorService: AuthorService, public dialog: MatDialog) {}
+    constructor(private loanService: LoanService, public dialog: MatDialog) {}
 
     ngOnInit(): void {
         this.loadPage();
@@ -50,7 +50,7 @@ export class AuthorList implements OnInit {
             pageable.pageNumber = event.pageIndex;
         }
 
-        this.authorService.getAuthors(pageable).subscribe((data) => {
+        this.loanService.getLoans(pageable).subscribe((data) => {
             this.dataSource.data = data.content;
             this.pageNumber = data.pageable.pageNumber;
             this.pageSize = data.pageable.pageSize;
@@ -58,8 +58,8 @@ export class AuthorList implements OnInit {
         });
     }
 
-    createAuthor() {
-        const dialogRef = this.dialog.open(AuthorEdit, {
+    createLoan() {
+        const dialogRef = this.dialog.open(LoanEdit, {
             data: {},
         });
 
@@ -68,9 +68,9 @@ export class AuthorList implements OnInit {
         });
     }
 
-    editAuthor(author: Author) {
-        const dialogRef = this.dialog.open(AuthorEdit, {
-            data: { author: author },
+    editLoan(loan: Loan) {
+        const dialogRef = this.dialog.open(LoanEdit, {
+            data: { loan: loan },
         });
 
         dialogRef.afterClosed().subscribe((result) => {
@@ -78,18 +78,18 @@ export class AuthorList implements OnInit {
         });
     }
 
-    deleteAuthor(author: Author) {
+    deleteLoan(loan: Loan) {
         const dialogRef = this.dialog.open(DialogConfirmation, {
             data: {
-                title: 'Eliminar autor',
+                title: 'Eliminar préstamo',
                 description:
-                    'Atención si borra el autor se perderán sus datos.<br> ¿Desea eliminar el autor?',
+                    'Atención si borra el préstamo se perderán sus datos.<br> ¿Desea eliminar el préstamo?',
             },
         });
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                this.authorService.deleteAuthor(author.id).subscribe((result) => {
+                this.loanService.deleteLoan(loan.id).subscribe((result) => {
                     this.ngOnInit();
                 });
             }

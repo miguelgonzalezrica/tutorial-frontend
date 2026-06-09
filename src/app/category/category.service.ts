@@ -1,24 +1,28 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Category } from './model/Category';
-import { CATEGORY_DATA } from './model/mock-categories';
 
 @Injectable({
-  providedIn: 'root'
+providedIn: 'root'
 })
-export class CategoryService {
+export class CategoryService { 
 
-  constructor() { }
+    protected readonly http = inject(HttpClient);
 
-  getCategories(): Observable<Category[]> {
-    return of(CATEGORY_DATA);
-  }
+    private baseUrl = 'http://localhost:8080/category';
 
-  saveCategory(category: Category): Observable<Category> {
-    return of(null);
-  }
+    getCategories(): Observable<Category[]> {
+        return this.http.get<Category[]>(this.baseUrl);
+    }
 
-  deleteCategory(idCategory : number): Observable<any> {
-    return of(null);
-  }  
+    saveCategory(category: Category): Observable<Category> {
+        const { id } = category;
+        const url = id ? `${this.baseUrl}/${id}` : this.baseUrl;
+        return this.http.put<Category>(url, category);
+    }
+
+    deleteCategory(idCategory : number): Observable<any> {
+        return this.http.delete(`${this.baseUrl}/${idCategory}`);
+    }  
 }
