@@ -12,8 +12,8 @@ export class ClientService {
 
     private baseUrl = 'http://localhost:8080/client';
 
-    getClients(): Observable<Client[]> {
-        return this.http.get<Client[]>(this.baseUrl);
+    getClients(name?: string): Observable<Client[]> {
+        return this.http.get<Client[]>(`${this.baseUrl}`);
     }
 
     saveClient(client: Client): Observable<Client> {

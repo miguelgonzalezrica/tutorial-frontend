@@ -1,7 +1,10 @@
+import { Client } from "../../client/model/Client";
+import { Game } from "../../game/model/Game";
+
 export interface Loan {
     id: number;
-    gameName: string;
-    clientName: string;
-    loanDate: Date;
-    returnDate: Date;
+    game: Game;
+    client: Client;
+    loanDate: string;
+    returnDate: string;
 }

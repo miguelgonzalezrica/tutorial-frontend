@@ -5,6 +5,13 @@ import { Loan } from './model/Loan';
 import { PaginatedData } from '../core/model/page/PaginatedData';
 import { HttpClient } from '@angular/common/http';
 
+export const formatDate = (date: Date): string => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+};
+
 @Injectable({
 providedIn: 'root'
 })
@@ -14,12 +21,16 @@ export class LoanService {
 
     private baseUrl = 'http://localhost:8080/loan'; 
 
-    getLoans(pageable: Pageable): Observable<PaginatedData<Loan>> {
-        return this.http.post<PaginatedData<Loan>>(this.baseUrl, { pageable: pageable });
+    
+    getLoans(pageable: Pageable, gameTitle?: string, clientName?: string, activeDate?: Date) {
+        let formattedDate = null;
+        if(activeDate){
+            formattedDate = formatDate(activeDate);
+        }
+        return this.http.post<PaginatedData<Loan>>(this.baseUrl,{pageable,gameTitle,clientName,activeDate: formattedDate});
     }
 
     saveLoan(loan: Loan): Observable<Loan> {
-        console.log("Actualizo loan:", loan);
         const { id } = loan;
         const url = id ? `${this.baseUrl}/${id}` : this.baseUrl;
         return this.http.put<Loan>(url, loan);
@@ -27,9 +38,5 @@ export class LoanService {
 
     deleteLoan(idLoan: number): Observable<void> {
         return this.http.delete<void>(`${this.baseUrl}/${idLoan}`);
-    }
-
-    getAllLoan(): Observable<Loan[]> {
-        return this.http.get<Loan[]>(this.baseUrl);
     }
 }
