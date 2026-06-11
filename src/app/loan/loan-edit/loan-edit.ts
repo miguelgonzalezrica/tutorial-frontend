@@ -112,7 +112,7 @@ export class LoanEdit implements OnInit {
                 this.dialogRef.close(true);
             },
             error: (err) => {
-                this.errorMessage.set(err.error?.message);
+                this.errorMessage.set(err.error);
             }
         });
     }
