@@ -134,7 +134,8 @@ export class LoanList implements OnInit {
     }
 
     onSearch(event?: PageEvent): void {
-
+        this.pageNumber = 0;
+        
         const pageable: Pageable = {
             pageNumber: this.pageNumber,
             pageSize: this.pageSize,
@@ -150,15 +151,21 @@ export class LoanList implements OnInit {
             pageable.pageSize = event.pageSize;
             pageable.pageNumber = event.pageIndex;
         }
-        const gameTitle =
-            this.filterGame() != null ? this.filterGame()?.title : null;
-        const clientName =
-            this.filterClient() != null ? this.filterClient()?.name : null;
+        const gameId =
+            this.filterGame() != null ? this.filterGame()?.id : undefined;
+        const clientId =
+            this.filterClient() != null ? this.filterClient()?.id : undefined;
         const activeDate = 
             this.filterDate() != null ? this.filterDate() : null;
         this.loanService
-            .getLoans(pageable, gameTitle ?? undefined, clientName ?? undefined, activeDate ?? undefined)
-            .subscribe((loans) => this.dataSource.data = loans.content);
+            .getLoans(pageable, gameId, clientId, activeDate ?? undefined)
+            .subscribe((loans) => {
+                this.dataSource.data = loans.content,
+                this.totalElements = loans.totalElements,
+                this.pageNumber = loans.pageable.pageNumber,
+                this.pageSize = loans.pageable.pageSize
+            }
+        );
 
     }
 }

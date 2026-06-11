@@ -22,12 +22,12 @@ export class LoanService {
     private baseUrl = 'http://localhost:8080/loan'; 
 
     
-    getLoans(pageable: Pageable, gameTitle?: string, clientName?: string, activeDate?: Date) {
+    getLoans(pageable: Pageable, gameId?: number, clientId?: number, activeDate?: Date) {
         let formattedDate = null;
         if(activeDate){
             formattedDate = formatDate(activeDate);
         }
-        return this.http.post<PaginatedData<Loan>>(this.baseUrl,{pageable,gameTitle,clientName,activeDate: formattedDate});
+        return this.http.post<PaginatedData<Loan>>(this.baseUrl,{pageable,gameId,clientId,activeDate: formattedDate});
     }
 
     saveLoan(loan: Loan): Observable<Loan> {
