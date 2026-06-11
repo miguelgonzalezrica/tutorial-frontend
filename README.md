@@ -1,6 +1,6 @@
 # Ludoteca Tan
 
-Este repositorio contiene el codigo frontend de la aplicación de gestión de juegos de la ludoteca Tan. Este código forma parte de mi formación como estudiante en prácticas en Capgemini. 
+Este repositorio contiene el codigo frontend en Angular de la aplicación de gestión de juegos de la ludoteca Tan. Este código forma parte de mi formación como estudiante en prácticas en Capgemini. 
 
 ## Funcionalidades
 
